@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class HttpStatusCodes(Enum):
+class HttpStatusCodes(IntEnum):
     SUCCESS = 200
     CREATED = 201
     NO_CONTENT = 204

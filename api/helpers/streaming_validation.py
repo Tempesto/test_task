@@ -8,6 +8,7 @@ from api.models.chat_completion_chunk_response import ChatCompletionChunkRespons
 
 def validate_chunks(response_iterator):
     """Validate basic fields in streaming chunks for a positive scenario."""
+    response_iterator = response_iterator.iter_lines()
     chunk_count = 0
 
     for line in response_iterator:

@@ -15,7 +15,7 @@ def send_message(
         data = asdict(data)
         response = session.post(CHAT_COMPLETIONS, json=data, stream=True)
         assert_status_code(response, status_code)
-        return response.iter_lines()
+        return response
 
     else:
         data = asdict(data)
