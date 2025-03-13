@@ -1,4 +1,4 @@
-from api.exceptions import UnexpectedResponseStatus
+from api.helpers.exceptions import UnexpectedResponseStatus
 
 
 def assert_status_code(data, code):
