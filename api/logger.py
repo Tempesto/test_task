@@ -8,7 +8,9 @@ from requests import Response
 
 class Logger:
     date_now = str(datetime.now().strftime('%Y-%m-%d_%H:%M'))
-    filename = 'log/log_' + date_now + '.log'
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    log_dir = os.path.join(project_root, 'logs')
+    filename = os.path.join(log_dir, 'log_' + date_now + '.log')
     logs = []
 
     @classmethod
