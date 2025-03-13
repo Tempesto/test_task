@@ -17,5 +17,4 @@ def test_send_request_with_invalid_token():
         data=data,
         status_code=HttpStatusCodes.UNAUTHORIZED,
     )
-    response_data = response.json()
-    assert response_data['message'] == ErrorMessage.UNAUTHORIZED
+    assert response['message'] == ErrorMessage.UNAUTHORIZED
