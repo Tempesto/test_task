@@ -1,5 +1,6 @@
 import json
 
+import pytest
 from pytest_check import check
 
 from api.constants.streaming import DONE_MARKER, SSE_DATA_PREFIX
@@ -19,7 +20,7 @@ def validate_chunks(response_iterator):
                 break
 
             if not decoded_line.startswith(SSE_DATA_PREFIX):
-                continue
+                pytest.fail(f"Not correct format streaming chunk: {decoded_line}")
 
             json_payload = decoded_line[len(SSE_DATA_PREFIX) :]
             if not json_payload.strip():
@@ -37,10 +38,16 @@ def validate_chunks(response_iterator):
                         f"Chunk #{chunk_count}: Line 'object' mast be 'chat.completion.chunk', "
                         f"get '{chunk_response_obj.object}'"
                     )
-                assert isinstance(chunk_response_obj.choices, list), (
-                    f"Chunk #{chunk_count}: Line 'choices' mast be list, "
-                    f"get '{type(chunk_response_obj.choices)}'"
-                )
+                with check:
+                    assert isinstance(chunk_response_obj.choices, list), (
+                        f"Chunk #{chunk_count}: Line 'choices' mast be list, "
+                        f"get '{type(chunk_response_obj.choices)}'"
+                    )
+                for idx, choice in enumerate(chunk_response_obj.choices):
+                    with check:
+                        assert 'delta' in choice, (
+                            f"Chunk #{chunk_count}, choice #{idx}: 'delta' відсутній"
+                        )
 
             except json.JSONDecodeError as e:
                 raise AssertionError(f'Chunk #{chunk_count}: JSON decode error: {e}') from e
