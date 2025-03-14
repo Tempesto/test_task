@@ -6,7 +6,7 @@ from api.services.chat_completions import send_message
 
 
 @pytest.mark.chat_completions_stream_true
-def test_send_request_to_the_chat_with_corect_token_and_parameters(api_session):
+def test_send_request_to_the_chat_with_corect_token_and_parameters_check_chunks(api_session):
     data = ChatCompletionRequest()
     response = send_message(session=api_session, data=data)
     validate_chunks(response)
