@@ -8,23 +8,17 @@ from dataclasses import asdict
 def send_message(
     session,
     data: ChatCompletionRequest | dict,
-    status_code=HttpStatusCodes.SUCCESS.value,
+    status_code=HttpStatusCodes.SUCCESS,
 ):
     """Send message to chat completions."""
     if isinstance(data, ChatCompletionRequest):
         data = asdict(data)
-    if data.get('stream'):
-        response = session.post(CHAT_COMPLETIONS, json=data, stream=True)
-        assert_status_code(response, status_code)
-        if response.status_code != HttpStatusCodes.SUCCESS:
-            return response.json()
-        return response.iter_lines()
 
-    else:
-        response = session.post(CHAT_COMPLETIONS, json=data)
-        assert_status_code(response, status_code)
-        response_data = response.json()
-        if response.status_code != HttpStatusCodes.SUCCESS:
-            return response
+    is_stream = bool(data.get('stream'))
+    response = session.post(CHAT_COMPLETIONS, json=data, stream=is_stream)
+    assert_status_code(response, status_code)
 
-        return response_data
+    if response.status_code != HttpStatusCodes.SUCCESS.value:
+        return response.json() if is_stream else response
+
+    return response.iter_lines() if is_stream else response.json()
