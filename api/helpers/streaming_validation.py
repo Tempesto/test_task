@@ -20,7 +20,7 @@ def validate_chunks(response_iterator):
                 break
 
             if not decoded_line.startswith(SSE_DATA_PREFIX):
-                pytest.fail(f"Not correct format streaming chunk: {decoded_line}")
+                pytest.fail(f'Not correct format streaming chunk: {decoded_line}')
 
             json_payload = decoded_line[len(SSE_DATA_PREFIX) :]
             if not json_payload.strip():
@@ -45,9 +45,9 @@ def validate_chunks(response_iterator):
                     )
                 for idx, choice in enumerate(chunk_response_obj.choices):
                     with check:
-                        assert 'delta' in choice, (
-                            f"Chunk #{chunk_count}, choice #{idx}: 'delta' відсутній"
-                        )
+                        assert (
+                            'delta' in choice
+                        ), f"Chunk #{chunk_count}, choice #{idx}: 'delta' відсутній"
 
             except json.JSONDecodeError as e:
                 raise AssertionError(f'Chunk #{chunk_count}: JSON decode error: {e}') from e
