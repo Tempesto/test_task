@@ -21,11 +21,10 @@ def send_message(
         return response.iter_lines()
 
     else:
-        data = asdict(data)
         response = session.post(CHAT_COMPLETIONS, json=data)
         assert_status_code(response, status_code)
         response_data = response.json()
-        if response.status_code != HttpStatusCodes.SUCCESS.value:
+        if response.status_code != HttpStatusCodes.SUCCESS:
             return response
 
         return response_data
